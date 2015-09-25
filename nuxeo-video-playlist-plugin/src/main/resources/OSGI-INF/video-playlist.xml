@@ -24,7 +24,7 @@
 
     <filter id="canDoVideoPlaylist">
       <rule grant="true">
-        <facet>Folderish</facet>
+        <condition>#{videoPlaylist.hasPlaylist()}</condition>
       </rule>
     </filter>
 

@@ -43,7 +43,12 @@
 		</div>
 
 		<script type="text/javascript" charset="utf-8">
-            NxVPL.init("vpl-#{widget.id}");
+		jQuery(document).ready(function() {
+		    //getPlaylistAsJsonString() double quote every string
+		    var playListStrJsonStr = '#{videoPlaylist.getPlaylistAsJsonString()}';
+		    var playListJson = JSON.parse(playListStrJsonStr);
+		    NxVPL.init("vpl-#{widget.id}", playListJson);
+		});
         </script>
 
 	</div>

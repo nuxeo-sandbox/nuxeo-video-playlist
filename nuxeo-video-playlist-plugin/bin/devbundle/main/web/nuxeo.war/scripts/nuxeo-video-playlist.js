@@ -21,16 +21,17 @@ var gVideos = [],
 
 NxVPL = {
 
-  init: function(videoId) {
+  init: function(videoId, playlistJson) {
     // The code is called twice: When the fancybox is initialized but not
     // yet displayed, and when it is displayed. We want to act only when everything is loaded
     var fancybox = jQuery("#fancybox-content");
     if(!fancybox || !fancybox.is(":visible")) {
       return
     }
-      debugger;
+    debugger;
 
     gPlayer = vjs(document.getElementById(videoId));
+    gVideos = playlistJson;
 
     NxVPL.cacheElements();
     NxVPL.TEST_SETUP_LIST();
@@ -41,6 +42,7 @@ NxVPL = {
   },
 
   TEST_SETUP_LIST : function() {
+      /*
     gVideos = [
     {
       src : [
@@ -66,6 +68,7 @@ NxVPL = {
       title : 'Toy_Story_2_trailer'
     }
     ];
+    */
   },
 
 
