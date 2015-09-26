@@ -36,7 +36,9 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelIterator;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.Sorter;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
+import org.nuxeo.ecm.core.api.model.PropertyException;
 import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
 import org.nuxeo.ecm.platform.video.VideoConstants;
 
@@ -164,16 +166,16 @@ public class VideoPlaylistBean implements Serializable {
             // =================================================
             
         } else if (currentDocument.hasFacet("Folderish")) {
-
-            DocumentModelList docs = documentManager.getChildren(currentDocument.getRef());
+            
+            DocumentTitleSorter sorter = new DocumentTitleSorter();
+            DocumentModelList docs = documentManager.getChildren(currentDocument.getRef(), null, null, sorter);
             for (DocumentModel doc : docs) {
                 if (hasVideo(doc)) {
                     addToPlayList(doc);
                 }
             }
         }
-    }
-    
+    }    
     
     protected void addToPlayList(DocumentModel inDoc) {
         
