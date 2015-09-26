@@ -5,15 +5,15 @@
     point="actions">
 
     <action id="videoPlaylistAction" order="0" label="Playlist..." type="fancybox"
-      icon="/icons/crop_image.png">
+      icon="">
       <category>DOCUMENT_UPPER_ACTION</category>
       <category>INFO_VIEW_ACTIONS</category>
       <filter-id>canDoVideoPlaylist</filter-id>
       <properties>
         <property name="include">/incl/video-playlist.xhtml</property>
         <property name="autoDimensions">false</property>
-        <property name="width">90%</property>
-        <property name="height">100%</property>
+        <property name="width">92%</property>
+        <property name="height">540px</property>
       </properties>
     </action>
 

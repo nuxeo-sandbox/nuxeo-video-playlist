@@ -84,8 +84,6 @@ public class VideoPlaylistBean implements Serializable {
 
         boolean looksOk = false;
 
-        log.warn("hasPlayList");
-
         // Already built once, then all is good
         if (videos != null && videos.size() > 0) {
             return true;

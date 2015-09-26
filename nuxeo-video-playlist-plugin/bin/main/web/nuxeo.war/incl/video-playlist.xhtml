@@ -8,12 +8,20 @@
 	xmlns:nxl="http://nuxeo.org/nxforms/layout"
 	xmlns:nxd="http://nuxeo.org/nxweb/document" id="#{widget.id}">
 
-	<!-- Asuming videojs (css and js) have been already loaded by Nuxeo, we laoad nly "our" specific resources -->
+	<!-- Asuming videojs (css and js) have been already loaded by Nuxeo, we load only "our" specific resources -->
 	<link rel="stylesheet" type="text/css"
 		href="#{contextPath}/css/nuxeo-video-playlist.css" />
+	
+	<c:set var="videoId" value="vpl-#{widget.id}" />
 
 	<script src="#{contextPath}/scripts/videojs-playlists.js"></script>
 	<script src="#{contextPath}/scripts/nuxeo-video-playlist.js"></script>
+	<script>
+	// We make sure our global object is reset evety time the user opens the fancybox
+	// (see nuxeo-video-playlist.js)
+	console.log("chiottes");
+	NxVPL = null;
+	</script>
 
 	<h3>
 		<h:outputText value="Video Playlist" />
@@ -25,7 +33,7 @@
   		-->
 		<div class="video-holder centered">
 
-			<video id="vpl-#{widget.id}" name="vpl-#{widget.id}"
+			<video id="#{videoId}" name="#{videoId}"
 				class="video-js vjs-default-skin" width="640" height="480"
 				controls="controls" preload="auto" poster="">
 			</video>
@@ -35,20 +43,21 @@
 					<ul></ul>
 				</div>
 				<div class="button-holder">
-					<img id="prev" alt="Previous video"
-						src="#{contextPath}/img/Previous.png"></img> <img id="next"
+					<img id="nxpvl_prev" alt="Previous video"
+						src="#{contextPath}/img/Previous.png"></img> <img id="nxpvl_next"
 						alt="Next video" src="#{contextPath}/img/Next.png"></img>
 				</div>
 			</div>
 		</div>
 
 		<script type="text/javascript" charset="utf-8">
-		jQuery(document).ready(function() {
-		    //getPlaylistAsJsonString() double quote every string
-		    var playListStrJsonStr = '#{videoPlaylist.getPlaylistAsJsonString()}';
-		    var playListJson = JSON.parse(playListStrJsonStr);
-		    NxVPL.init("vpl-#{widget.id}", playListJson);
-		});
+jQuery(document).ready(function() {
+    //getPlaylistAsJsonString() double-quotes the strings
+    var playListStrJsonStr = '#{videoPlaylist.getPlaylistAsJsonString()}';
+    var playListJson = JSON.parse(playListStrJsonStr);
+    gPlaylist = playListJson;
+    NuxeoVideoPlaylist_Init("#{videoId}", playListJson);
+});
         </script>
 
 	</div>

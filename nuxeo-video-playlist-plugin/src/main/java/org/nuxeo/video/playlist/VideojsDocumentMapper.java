@@ -42,7 +42,7 @@ import org.nuxeo.ecm.platform.video.VideoDocument;
  * @since 7.3
  */
 public class VideojsDocumentMapper {
-    
+
     private static final Log log = LogFactory.getLog(VideojsDocumentMapper.class);
 
     protected ArrayList<String> sources;
@@ -53,13 +53,13 @@ public class VideojsDocumentMapper {
 
     protected DocumentModel doc = null;
 
-    // Will be first in list
+    // They will be the first in list
     protected static final ArrayList<String> MAIN_FORMATS = new ArrayList<String>(
             Arrays.asList("MP4 480p", "WebM 480p"));
 
     public VideojsDocumentMapper(DocumentModel inDoc) {
         doc = inDoc;
-        
+
         fillInfos();
     }
 
@@ -94,20 +94,20 @@ public class VideojsDocumentMapper {
         // Now, add the others
         Collection<TranscodedVideo> allTranscoded = videoDocument.getTranscodedVideos();
         for (TranscodedVideo oneTranscoded : allTranscoded) {
-            if(!MAIN_FORMATS.contains(oneTranscoded.getName())) {
+            if (!MAIN_FORMATS.contains(oneTranscoded.getName())) {
                 blobPropertyName = oneTranscoded.getBlobPropertyName();
                 url = DocumentModelFunctions.bigFileUrl(doc, blobPropertyName, oneTranscoded.getBlob().getFilename());
                 sources.add(url);
             }
         }
-        
+
         // And add the main video
         Blob mainBlob = (Blob) doc.getPropertyValue("file:content");
         url = DocumentModelFunctions.bigFileUrl(doc, "file:content", mainBlob.getFilename());
         sources.add(url);
 
     }
-    
+
     public boolean canBeUsedWithVideojs() {
         return sources.size() > 0;
     }
@@ -115,35 +115,23 @@ public class VideojsDocumentMapper {
     public String getJsonString() throws IOException {
 
         String json = "";
-        // The JSON is easy, let's build it manually
-        /*
-        json = "{";
-        json += "\"src: [";
-        for(String oneSource : sources) {
-            json += "\"" + oneSource + "\",";
-        }
-        json += "],";
-        json += "\"poster\": \"" + poster + "\",";
-        json += "\"title\": \"" + title + "\"";
-        
-        json += "}";
-        */
-        ByteArrayOutputStream out=new ByteArrayOutputStream();
-        JsonGenerator jg = new JsonFactory().createJsonGenerator(out,JsonEncoding.UTF8);
-        
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        JsonGenerator jg = new JsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
+
         jg.writeStartObject();
         jg.writeArrayFieldStart("src");
-        for(String src : sources) {
+        for (String src : sources) {
             jg.writeString(src);
         }
         jg.writeEndArray();
         jg.writeStringField("poster", poster);
         jg.writeStringField("title", title);
         jg.writeEndObject();
-        
+
         jg.close();
         json = out.toString(StandardCharsets.UTF_8.name());
-        
+
         return json;
     }
 }
