@@ -60,7 +60,7 @@ header h1 {
     padding: 10px;
 }
 .centered {
-    width: 1024px;
+    /*width: 1024px;*/
     margin: 30px auto 0;
 }
 
@@ -81,6 +81,8 @@ header h1 {
     padding: 10px;
     height: 36px;
     margin: 5px;
+    
+    background-color: black;
 }
 
 .playlist {
@@ -102,15 +104,15 @@ header h1 {
     border: 1px solid #1a1a18;
 }
 
-#nxpvl_prev {
+#vpl-prev {
     float: left;
 }
 
-#nxpvl_next {
+#vpl-next {
     float: left; /*right;*/
 }
 
-#nxpvl_prev, #nxpvl_next {
+#vpl-prev, #vpl-next {
     cursor: pointer;
     margin: 5px;
 }

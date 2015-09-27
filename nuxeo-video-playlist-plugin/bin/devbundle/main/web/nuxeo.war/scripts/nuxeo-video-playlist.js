@@ -26,19 +26,34 @@
  * 
  * The main issue is: We are called twice. Once before the fancybox shows itself, once after,
  * while we don't want to initialize everything 2 times, mainly because we don't handle
- * dependencies (videojs and videojs-playlist). Well, we know that initializing 
+ * dependencies (videojs and videojs-playlist). Well, we know that initializing videojs-playlist is bad (navigating the the next video +> goes to next + next)
  * 
- * This is why, until we understand everything ;->, we are usings tests and flags
+ * This is why, until we understand everything ;->, we are using tests and flags
  */
-var gVideos = [], gPlayer, gEls = {}, gVideoId;
+// The .xhtml sets ids avec our divs with this suffix
+// We rebuild the IDs and get access to the divs dynamically
+// => When ID_SUFFIX is used, check video-playlist.xhtlm for the perfix
+var ID_SUFFIX;
+var MAIN_DIV_ID, VIDEO_ID, PLAYLIST_ID, PREV_BUTTON_ID, NEXT_BUTTON_ID;
+
+var gVideos = [], gPlayer, gEls = {};
 
 if (typeof NcVPL_INIT_COUNTER === "undefined" || NcVPL_INIT_COUNTER === null) {
     NcVPL_INIT_COUNTER = 0;
 }
 
-function NuxeoVideoPlaylist_Init(inVideoId, inPlaylistJson) {
+function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
+    
+    ID_SUFFIX = inIdSuffix;
+    
+    MAIN_DIV_ID = "vpl-mainDiv-" + ID_SUFFIX;
+    VIDEO_ID = "vpl-video-" + ID_SUFFIX;
+    PLAYLIST_ID = "vpl-playlist-" + ID_SUFFIX;
+    
+    // These one are hard-coded, also in the css
+    PREV_BUTTON_ID = "vpl-prev";
+    NEXT_BUTTON_ID = "vpl-next";
 
-    gVideoId = inVideoId;
     gVideos = inPlaylistJson;
 
     var fancybox = jQuery("#fancybox-content");
@@ -56,7 +71,7 @@ function NuxeoVideoPlaylist_Init(inVideoId, inPlaylistJson) {
         NxVPL = {
 
             init : function() {
-                gPlayer = vjs(document.getElementById(gVideoId));
+                gPlayer = vjs(document.getElementById(VIDEO_ID));
 
                 NxVPL.cacheElements();
                 NxVPL.initVideos();
@@ -68,8 +83,8 @@ function NuxeoVideoPlaylist_Init(inVideoId, inPlaylistJson) {
             cacheElements : function() {
                 gEls = {};
                 gEls.$playlist = jQuery('div.playlist > ul');
-                gEls.$prev = jQuery('#nxpvl_prev');
-                gEls.$next = jQuery('#nxpvl_next');
+                gEls.$prev = jQuery(document.getElementById(PREV_BUTTON_ID));
+                gEls.$next = jQuery(document.getElementById(NEXT_BUTTON_ID));
             },
 
             initVideos : function() {
@@ -134,10 +149,32 @@ function NuxeoVideoPlaylist_Init(inVideoId, inPlaylistJson) {
                     gPlayer.playList(videoIndex);
                     NxVPL.updateActiveVideo();
                 }
+            },
+            
+            alignElements : function() {
+                // Still this "2 init calls problem (see header of this script)
+                // But here, we'd like to be in the second call...
+                // So, let's do the usual workaround, with a timeout :-<
+                setTimeout(function() {
+                    var fancyboxContainerObj, mainDivObj, videoObj, playlistObj, mainWidth, margin;
+                                        
+                    fancyboxContainerObj = jQuery("#fancybox-content");
+                    mainDivObj = jQuery(document.getElementById(MAIN_DIV_ID));
+                    videoObj = jQuery(document.getElementById(VIDEO_ID));
+                    playlistObj = jQuery(document.getElementById(PLAYLIST_ID));
+                    
+                    mainWidth = fancyboxContainerObj.width();
+                    
+                    mainDivObj.width(videoObj.width() + playlistObj.width() + 4);
+                    margin = (fancyboxContainerObj.width() - mainDivObj.width()) / 2;
+                    
+                    mainDivObj.css({"margin-top": margin, "margin-left": margin});
+                    
+                }, 250);
             }
         };
 
         NxVPL.init();
+        NxVPL.alignElements();
     }
 }
-

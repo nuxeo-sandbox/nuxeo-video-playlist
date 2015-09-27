@@ -12,9 +12,9 @@
       <properties>
         <property name="include">/incl/video-playlist.xhtml</property>
         <property name="autoDimensions">false</property>
-        <property name="scrolling">no</property>
-        <property name="width">1024px</property>
+        <property name="width">80%</property>
         <property name="height">540px</property>
+        <property name="scrolling">no</property>
       </properties>
     </action>
 
