@@ -193,6 +193,11 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
                             "margin-top" : marginV,
                             "margin-left" : marginH
                         });
+                        TOTAL_LIST_EL_H = 0;
+                        for (var i = 0, len = gVideos.length; i < len; i++) {
+                            TOTAL_LIST_EL_H += jQuery("#vpl-video-" + i).outerHeight();
+                        }
+                        ZEPL_H = playlistObj.height();
                     }
 
                 }, 50);

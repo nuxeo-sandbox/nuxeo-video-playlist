@@ -145,6 +145,10 @@ header h1 {
     background: #353535;
 }
 
+.poster {
+	height: 41px;
+}
+
 
 .playlist .poster, .playlist .title  {
     display: inline-block;
