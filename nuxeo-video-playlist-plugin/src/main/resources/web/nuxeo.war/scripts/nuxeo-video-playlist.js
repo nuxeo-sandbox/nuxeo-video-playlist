@@ -34,7 +34,7 @@
 // We rebuild the IDs and get access to the divs dynamically
 // => When ID_SUFFIX is used, check video-playlist.xhtlm for the perfix
 var ID_SUFFIX;
-var MAIN_DIV_ID, VIDEO_ID, PLAYLIST_ID, PREV_BUTTON_ID, NEXT_BUTTON_ID;
+var MAIN_DIV_ID, VIDEO_ID, PLAYLIST_ID, FIRST_BUTTON_ID, PREV_BUTTON_ID, NEXT_BUTTON_ID, LAST_BUTTON_ID;
 
 var gVideos = [], gPlayer, gEls = {};
 
@@ -51,8 +51,10 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
     PLAYLIST_ID = "vpl-playlist-" + ID_SUFFIX;
 
     // These one are hard-coded, also in the css
+    FIRST_BUTTON_ID = "vpl-first";
     PREV_BUTTON_ID = "vpl-prev";
     NEXT_BUTTON_ID = "vpl-next";
+    LAST_BUTTON_ID = "vpl-last";
 
     gVideos = inPlaylistJson;
 
@@ -83,8 +85,10 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
             cacheElements : function() {
                 gEls = {};
                 gEls.$playlist = jQuery('div.playlist > ul');
+                gEls.$first = jQuery(document.getElementById(FIRST_BUTTON_ID));
                 gEls.$prev = jQuery(document.getElementById(PREV_BUTTON_ID));
                 gEls.$next = jQuery(document.getElementById(NEXT_BUTTON_ID));
+                gEls.$last = jQuery(document.getElementById(LAST_BUTTON_ID));
             },
 
             initVideos : function() {
@@ -94,7 +98,7 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
             createListOfVideos : function() {
                 var html = '';
                 for (var i = 0, len = gVideos.length; i < len; i++) {
-                    html += '<li data-videoplaylist="' + i + '">' + '<span class="number">' + (i + 1) + '</span>'
+                    html += '<li id="vpl-video-' + i + '" data-videoplaylist="' + i + '">' + '<span class="number">' + (i + 1) + '</span>'
                             + '<span class="poster"><img src="' + gVideos[i].poster + '"></span>'
                             + '<span class="title">' + gVideos[i].title + '</span>' + '</li>';
                 }
@@ -113,8 +117,10 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
 
                 gEls.$playlist.find('li').on('click', NxVPL.selectVideo);
 
+                gEls.$first.on('click', NxVPL.goToFirst);
                 gEls.$prev.on('click', NxVPL.goToPrevious);
                 gEls.$next.on('click', NxVPL.goToNext);
+                gEls.$last.on('click', NxVPL.goToLast);
 
                 gPlayer.on('next', function(e) {
                     //console.log('Next video');
@@ -131,6 +137,11 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
                 });
             },
 
+            goToFirst : function(e) {
+                gPlayer.playList(0);
+                NxVPL.updateActiveVideo();
+            },
+
             goToPrevious : function(e) {
                 gPlayer["prev"]();
             },
@@ -138,6 +149,11 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
             goToNext : function(e) {
                 gPlayer["next"]();
 
+            },
+
+            goToLast : function(e) {
+                gPlayer.playList(gVideos.length - 1);
+                NxVPL.updateActiveVideo();
             },
 
             selectVideo : function(e) {
@@ -158,9 +174,9 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
                 setTimeout(function() {
                     var playlistObj = jQuery(document.getElementById(PLAYLIST_ID));
                     if (playlistObj.width() > 700) {
-                        setTimeout(alignElements, 100);
+                        setTimeout(alignElements, 50);
                     } else {
-                        var fancyboxContainerObj, mainDivObj, videoObj, playlistObj, mainWidth, margin;
+                        var fancyboxContainerObj, mainDivObj, videoObj, playlistObj, mainWidth, mainHeight, marginH, marginV;
 
                         fancyboxContainerObj = jQuery("#fancybox-content");
                         mainDivObj = jQuery(document.getElementById(MAIN_DIV_ID));
@@ -168,17 +184,18 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
                         playlistObj = jQuery(document.getElementById(PLAYLIST_ID));
 
                         mainWidth = fancyboxContainerObj.width();
-
                         mainDivObj.width(videoObj.width() + playlistObj.width() + 4);
-                        margin = (fancyboxContainerObj.width() - mainDivObj.width()) / 2;
+                        marginH = (fancyboxContainerObj.width() - mainDivObj.width()) / 2;
+
+                        marginV = ((fancyboxContainerObj.height() - mainDivObj.position().top) - mainDivObj.height()) / 2;
 
                         mainDivObj.css({
-                            "margin-top" : margin,
-                            "margin-left" : margin
+                            "margin-top" : marginV,
+                            "margin-left" : marginH
                         });
                     }
 
-                }, 100);
+                }, 50);
             }
         };
 

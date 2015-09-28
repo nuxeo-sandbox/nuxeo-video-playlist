@@ -77,13 +77,6 @@ header h1 {
     display: inline-block;
     vertical-align: top;
 }
-.button-holder {
-    padding: 10px;
-    height: 36px;
-    margin: 5px;
-    
-    background-color: black;
-}
 
 .playlist {
     height: 444px; /*220px;*/
@@ -104,18 +97,32 @@ header h1 {
     border: 1px solid #1a1a18;
 }
 
+.button-holder {
+    padding: 10px;
+    height: 36px;
+    margin: 5px;
+    
+    background-color: black;
+}
+
+.playlist-button {
+	cursor: pointer;
+    margin: 5px !important;
+}
+/*
 #vpl-prev {
     float: left;
 }
 
 #vpl-next {
-    float: left; /*right;*/
+    float: left;
 }
 
 #vpl-prev, #vpl-next {
     cursor: pointer;
     margin: 5px;
 }
+*/
 
 .playlist ul {
     padding: 0;

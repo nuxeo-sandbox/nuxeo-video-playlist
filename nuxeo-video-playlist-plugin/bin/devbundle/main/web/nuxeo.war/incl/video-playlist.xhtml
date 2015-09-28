@@ -36,13 +36,18 @@
 			</video>
 
 			<div id="vpl-playlist-#{widget.id}" class="playlist-components">
-				<div class="playlist">
+				<div id="ZEPLAYLIST" class="playlist">
 					<ul></ul>
 				</div>
 				<div class="button-holder">
-					<img id="vpl-prev" alt="Previous video"
-						src="#{contextPath}/img/Previous.png"></img> <img id="vpl-next"
-						alt="Next video" src="#{contextPath}/img/Next.png"></img>
+					<img id="vpl-first" alt="First video" class="playlist-button"
+						src="#{contextPath}/img/vpl-first.png"></img>
+					<img id="vpl-prev" alt="Previous video" class="playlist-button"
+						src="#{contextPath}/img/vpl-prev.png"></img>
+					<img id="vpl-next" alt="Next video"  class="playlist-button"
+						src="#{contextPath}/img/vpl-next.png"></img>
+					<img id="vpl-last" alt="Last video" class="playlist-button"
+						src="#{contextPath}/img/vpl-last.png"></img>
 				</div>
 			</div>
 		</div>

@@ -53,7 +53,7 @@ public class VideoPlaylistBean implements Serializable {
     // PARENT_ID to be replaced
     private static final String NXQL_FOR_FOLDERISH = "SELECT * From Document WHERE ecm:parentId = 'PARENT_ID'"
             + " AND ecm:mixinType = '" + VideoConstants.VIDEO_FACET + "' AND ecm:mixinType != 'HiddenInNavigation'"
-            + " AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:currentLifeCycleState != 'deleted'"
+            + " AND ecm:isVersion = 0 AND ecm:currentLifeCycleState != 'deleted'"
             + " AND file:content/name IS NOT NULL";
 
     protected ArrayList<VideojsDocumentMapper> videos = null;
@@ -115,6 +115,7 @@ public class VideoPlaylistBean implements Serializable {
                 } catch (Exception e) {
                     // TODO
                     // When moving to a version > 7.4, remove Exception, use the correct exception
+                    // But anyway, in all case, we just ignore this exception.
                 }
             }
 
@@ -151,7 +152,6 @@ public class VideoPlaylistBean implements Serializable {
 
             Collection collectionAdapter = currentDocument.getAdapter(Collection.class);
             List<String> documentIds = collectionAdapter.getCollectedDocumentIds();
-            VideojsDocumentMapper vjsMapper;
             DocumentModel doc;
             for (String id : documentIds) {
                 try {
@@ -160,6 +160,7 @@ public class VideoPlaylistBean implements Serializable {
                 } catch (Exception e) {
                     // TODO
                     // When moving to a version > 7.4, remove Exception, use the correct exception
+                    // But anyway, in all case, we just ignore this exception.
                 }
             }
 
@@ -172,21 +173,11 @@ public class VideoPlaylistBean implements Serializable {
         } else if (currentDocument.hasFacet("Folderish")) {
 
             String nxql = NXQL_FOR_FOLDERISH.replace("PARENT_ID", currentDocument.getId());
-            nxql += " ORDER BY dc:title"; 
+            nxql += " ORDER BY dc:title";
             DocumentModelList docs = documentManager.query(nxql);
             for (DocumentModel doc : docs) {
                 addToPlayList(doc);
             }
-
-            /*
-            DocumentTitleSorter sorter = new DocumentTitleSorter();
-            DocumentModelList docs = documentManager.getChildren(currentDocument.getRef(), null, null, sorter);
-            for (DocumentModel doc : docs) {
-                if (hasVideo(doc)) {
-                    addToPlayList(doc);
-                }
-            }
-            */
         }
     }
 
