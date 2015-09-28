@@ -43,13 +43,13 @@ if (typeof NcVPL_INIT_COUNTER === "undefined" || NcVPL_INIT_COUNTER === null) {
 }
 
 function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
-    
+
     ID_SUFFIX = inIdSuffix;
-    
+
     MAIN_DIV_ID = "vpl-mainDiv-" + ID_SUFFIX;
     VIDEO_ID = "vpl-video-" + ID_SUFFIX;
     PLAYLIST_ID = "vpl-playlist-" + ID_SUFFIX;
-    
+
     // These one are hard-coded, also in the css
     PREV_BUTTON_ID = "vpl-prev";
     NEXT_BUTTON_ID = "vpl-next";
@@ -150,27 +150,35 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
                     NxVPL.updateActiveVideo();
                 }
             },
-            
+
             alignElements : function() {
-                // Still this "2 init calls problem (see header of this script)
+                // Still this "2 init calls" problem (see header of this script)
                 // But here, we'd like to be in the second call...
                 // So, let's do the usual workaround, with a timeout :-<
                 setTimeout(function() {
-                    var fancyboxContainerObj, mainDivObj, videoObj, playlistObj, mainWidth, margin;
-                                        
-                    fancyboxContainerObj = jQuery("#fancybox-content");
-                    mainDivObj = jQuery(document.getElementById(MAIN_DIV_ID));
-                    videoObj = jQuery(document.getElementById(VIDEO_ID));
-                    playlistObj = jQuery(document.getElementById(PLAYLIST_ID));
-                    
-                    mainWidth = fancyboxContainerObj.width();
-                    
-                    mainDivObj.width(videoObj.width() + playlistObj.width() + 4);
-                    margin = (fancyboxContainerObj.width() - mainDivObj.width()) / 2;
-                    
-                    mainDivObj.css({"margin-top": margin, "margin-left": margin});
-                    
-                }, 250);
+                    var playlistObj = jQuery(document.getElementById(PLAYLIST_ID));
+                    if (playlistObj.width() > 700) {
+                        setTimeout(alignElements, 100);
+                    } else {
+                        var fancyboxContainerObj, mainDivObj, videoObj, playlistObj, mainWidth, margin;
+
+                        fancyboxContainerObj = jQuery("#fancybox-content");
+                        mainDivObj = jQuery(document.getElementById(MAIN_DIV_ID));
+                        videoObj = jQuery(document.getElementById(VIDEO_ID));
+                        playlistObj = jQuery(document.getElementById(PLAYLIST_ID));
+
+                        mainWidth = fancyboxContainerObj.width();
+
+                        mainDivObj.width(videoObj.width() + playlistObj.width() + 4);
+                        margin = (fancyboxContainerObj.width() - mainDivObj.width()) / 2;
+
+                        mainDivObj.css({
+                            "margin-top" : margin,
+                            "margin-left" : margin
+                        });
+                    }
+
+                }, 100);
             }
         };
 

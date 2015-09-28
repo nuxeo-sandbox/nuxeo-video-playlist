@@ -50,6 +50,12 @@ public class VideoPlaylistBean implements Serializable {
 
     private static final Log log = LogFactory.getLog(VideoPlaylistBean.class);
 
+    // PARENT_ID to be replaced
+    private static final String NXQL_FOR_FOLDERISH = "SELECT * From Document WHERE ecm:parentId = 'PARENT_ID'"
+            + " AND ecm:mixinType = '" + VideoConstants.VIDEO_FACET + "' AND ecm:mixinType != 'HiddenInNavigation'"
+            + " AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:currentLifeCycleState != 'deleted'"
+            + " AND file:content/name IS NOT NULL";
+
     protected ArrayList<VideojsDocumentMapper> videos = null;
 
     @In(create = true, required = false)
@@ -113,19 +119,17 @@ public class VideoPlaylistBean implements Serializable {
             }
 
         } else if (currentDocument.hasSchema("HERE THE SCHEMA FROM FRED's WORK")) {
-            
+
             // =================================================
             // Other fields?...
             // =================================================
-            
+
         } else if (currentDocument.hasFacet("Folderish")) {
 
-            DocumentModelList docs = documentManager.getChildren(currentDocument.getRef());
-            for (DocumentModel doc : docs) {
-                if (hasVideo(doc)) {
-                    return true;
-                }
-            }
+            // The query handles facet, existence of a file, etc...
+            String nxql = NXQL_FOR_FOLDERISH.replace("PARENT_ID", currentDocument.getId());
+            DocumentModelList docs = documentManager.query(nxql);
+            return docs.size() > 0;
         }
 
         return looksOk;
@@ -160,13 +164,21 @@ public class VideoPlaylistBean implements Serializable {
             }
 
         } else if (currentDocument.hasSchema("HERE THE SCHEMA FROM FRED's WORK")) {
-            
+
             // =================================================
             // Other fields?...
             // =================================================
-            
+
         } else if (currentDocument.hasFacet("Folderish")) {
-            
+
+            String nxql = NXQL_FOR_FOLDERISH.replace("PARENT_ID", currentDocument.getId());
+            nxql += " ORDER BY dc:title"; 
+            DocumentModelList docs = documentManager.query(nxql);
+            for (DocumentModel doc : docs) {
+                addToPlayList(doc);
+            }
+
+            /*
             DocumentTitleSorter sorter = new DocumentTitleSorter();
             DocumentModelList docs = documentManager.getChildren(currentDocument.getRef(), null, null, sorter);
             for (DocumentModel doc : docs) {
@@ -174,16 +186,17 @@ public class VideoPlaylistBean implements Serializable {
                     addToPlayList(doc);
                 }
             }
+            */
         }
-    }    
-    
+    }
+
     protected void addToPlayList(DocumentModel inDoc) {
-        
+
         VideojsDocumentMapper vjsMapper = new VideojsDocumentMapper(inDoc);
         if (vjsMapper.canBeUsedWithVideojs()) {
             videos.add(vjsMapper);
         }
-        
+
     }
 
     public String getPlaylistAsJsonString() throws IOException {
