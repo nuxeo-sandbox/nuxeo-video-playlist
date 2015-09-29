@@ -149,6 +149,10 @@ header h1 {
 	height: 41px;
 }
 
+.vpl_dragOver {
+	border: 1px dashed #ffffff;
+}
+
 
 .playlist .poster, .playlist .title  {
     display: inline-block;
