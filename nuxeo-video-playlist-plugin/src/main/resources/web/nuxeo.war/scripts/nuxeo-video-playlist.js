@@ -36,7 +36,7 @@
 var ID_SUFFIX;
 var MAIN_DIV_ID, VIDEO_ID, PLAYLIST_ID, FIRST_BUTTON_ID, PREV_BUTTON_ID, NEXT_BUTTON_ID, LAST_BUTTON_ID;
 
-var gVideos = [], gPlayer, gEls = {}, gDragSrcElt, gVideosAfterDD;
+var gVideos = [], gPlayer, gEls = {};
 
 if (typeof NcVPL_INIT_COUNTER === "undefined" || NcVPL_INIT_COUNTER === null) {
     NcVPL_INIT_COUNTER = 0;
@@ -69,12 +69,11 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
             return;
         }
 
-        //console.log("INIT NxVPL");
         NxVPL = {
 
             init : function() {
                 gPlayer = vjs(document.getElementById(VIDEO_ID));
-                
+
                 NxVPL.cacheElements();
                 NxVPL.initVideos();
                 NxVPL.createListOfVideos();
@@ -92,122 +91,23 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
             },
 
             initVideos : function() {
-                // The array received by videojs-playlist is kept by reference (playlist doesn not do a deep copy).
-                // And as it modifies the array, to add some custom infos, we must pass a deep-copy, because later,
+                // The array received by videojs-playlist is kept by reference (playlist does not do a deep copy).
+                // And as it modifies the array, to add some custom infos, we want to pass a deep-copy, just in
+                // later, in some version, we want to dynamically modify the list.
                 // if the user drag-drop, we reuse the original gVideos
-                var deepCopy = JSON.parse(JSON.stringify(gVideos));; //jQuery.extend(true, {}, gVideos);
+                var deepCopy = JSON.parse(JSON.stringify(gVideos));
                 gPlayer.playList(deepCopy);
-                //gPlayer.playList(gVideos);
             },
 
             createListOfVideos : function() {
                 var html = '';
                 for (var i = 0, len = gVideos.length; i < len; i++) {
-                    /*
                     html += '<li id="vpl-video-' + i + '" data-videoplaylist="' + i + '">' + '<span class="number">' + (i + 1) + '</span>'
                             + '<span class="poster"><img src="' + gVideos[i].poster + '"></span>'
-                            + '<span class="title">' + gVideos[i].title + '</span>' + '</li>';*/
-                    html += '<li data-videoplaylist="' + i + '">' + '<div id="vpl-video-' + i + '" draggable=true>'
-                            + '<span class="number">' + (i + 1) + '</span>' + '<span class="poster"><img src="'
-                            + gVideos[i].poster + '"></span>' + '<span class="title">' + gVideos[i].title + '</span>'
-                            + '</div></li>';
+                            + '<span class="title">' + gVideos[i].title + '</span>' + '</li>';
                 }
                 gEls.$playlist.empty().html(html);
                 NxVPL.updateActiveVideo();
-
-                // Workaround for FF, which needs a minimum of data bound to a drag handler
-                // Anyway, we must setup the drag handlers for all items
-                setTimeout(function() {
-
-                    var theItem, i, len;
-                    len = gVideos.length;
-                    for (i = 0; i < len; i++) {
-                        theItem = document.getElementById("vpl-video-" + i);
-
-                        theItem.addEventListener('dragstart', function(e) {
-
-                            gDragSrcElt = this;
-                            gDragSrcElt.vpl_originaIndex = parseInt(gDragSrcElt.id.replace("vpl-video-", ""));
-
-                            // FireFox _wants_ something in the drag-data.
-                            e.dataTransfer.setData('text', this.id);
-                        });
-
-                        theItem.addEventListener('dragenter', function(e) {
-
-                            if (gDragSrcElt != this) {
-                                this.classList.add("vpl_dragOver");
-                            }
-                        }, false);
-
-                        theItem.addEventListener('dragover', function(e) {
-
-                            if (e.preventDefault) {
-                                e.preventDefault(); // Necessary. Allows us to drop.
-                            }
-
-                            return false;
-
-                        }, false);
-
-                        theItem.addEventListener('dragleave', function(e) {
-                            this.classList.remove("vpl_dragOver");
-                        }, false);
-
-                        theItem.addEventListener('drop',
-                                function(e) {
-
-                                    var destIdx, srcIdx, count;
-                                    var theIdx, theLen; // do not use i nor len, they are in the outer loop already;
-
-                                    if (e.stopPropagation) {
-                                        e.stopPropagation(); // stops the browser from redirecting.
-                                    }
-
-                                    if (gDragSrcElt != this) {
-                                        srcIdx = gDragSrcElt.vpl_originaIndex;
-                                        destIdx = parseInt(this.id.replace("vpl-video-", ""));
-
-                                        gVideosAfterDD = [];
-                                        theLen = gVideos.length;
-                                        for (theIdx = 0; theIdx < theLen; ++theIdx) {
-                                            gVideosAfterDD.push(gVideos[theIdx]);
-                                        }
-                                        
-                                        vplp_utils_move(gVideosAfterDD, srcIdx, destIdx);
-
-                                    }
-                                    gDragSrcElt = null;
-
-                                    setTimeout(function() {
-                                        
-                                        gVideos = [];
-                                        theLen = gVideosAfterDD.length;
-                                        for (theIdx = 0; theIdx < theLen; ++theIdx) {
-                                            gVideos.push(gVideosAfterDD[theIdx]);
-                                        }
-                                        
-                                        NxVPL.initVideos();
-                                        NxVPL.createListOfVideos();
-                                        NxVPL.bindEvents();
-                                        NxVPL.goToFirst();
-                                        
-                                    }, 200);
-
-                                    return false;
-
-                                }, false);
-
-                        theItem.addEventListener('dragend', function(e) {
-                            for (var i = 0, len = gVideos.length; i < len; i++) {
-                                theItem = document.getElementById("vpl-video-" + i);
-                                theItem.classList.remove("vpl_dragOver");
-                            }
-
-                            return false;
-                        }, false);
-                    }
-                }, 500);
             },
 
             updateActiveVideo : function() {
@@ -227,17 +127,14 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
                 gEls.$last.on('click', NxVPL.goToLast);
 
                 gPlayer.on('next', function(e) {
-                    //console.log('Next video');
                     NxVPL.updateActiveVideo();
                 });
 
                 gPlayer.on('prev', function(e) {
-                    //console.log('Previous video');
                     NxVPL.updateActiveVideo();
                 });
 
                 gPlayer.on('lastVideoEnded', function(e) {
-                    //console.log('Last video has finished');
                 });
             },
 
@@ -264,7 +161,6 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
                 var clicked = e.target.nodeName === 'LI' ? jQuery(e.target) : jQuery(e.target).closest('li');
 
                 if (!clicked.hasClass('active')) {
-                    //console.log('Selecting video');
                     var videoIndex = clicked.data('videoplaylist');
                     gPlayer.playList(videoIndex);
                     NxVPL.updateActiveVideo();
@@ -309,17 +205,3 @@ function NuxeoVideoPlaylist_Init(inIdSuffix, inPlaylistJson) {
     }
 }
 
-function vplp_utils_move(inArray, inFrom, inTo) {
-    
-    if (inTo === inFrom) {
-        return;
-    }
-
-    var target = inArray[inFrom];
-    var increment = inTo < inFrom ? -1 : 1;
-
-    for (var k = inFrom; k != inTo; k += increment) {
-        inArray[k] = inArray[k + increment];
-    }
-    inArray[inTo] = target;
-}
