@@ -1,6 +1,6 @@
 # nuxeo-video-playlist
 
-(temp repository while it is work in progress)
+(README: To Be Done)
 
 
 ## License
