@@ -57,10 +57,10 @@ import org.nuxeo.ecm.platform.video.VideoConstants;
  * operation to get the list of ordered documents, and build the list of Videos</li>
  * <li>Second, if the document does not use nuxeo-palette, we check if is a Collection. If yes, we get the list of docs
  * with the "Video" facet in the collection</li>
- * <li>Then, if none of the above found at least one video, we try to find some in the children o the current document</li>
+ * <li>Then, if none of the above found at least one video, we try to find some in the children o the current document<br/>
+ * <b>IMPORTANT</b>: When handling Folderish, the plug-in does not handle versions. The code explicitly ignore versions when checking for
+ * available videos.</li>
  * </ul>
- * <b>IMPORTANT</b>: The plug-in does not handle versions. The code explicitely ignore versions when checking for
- * available videos.
  * <p>
  * About nuxeo-palette: We don't want to link to this plug-in and create a dependency to install it. This is why we just
  * test the facet ("palette") and possibly use the operation provided by nuxeo-palette. Which means there is one
@@ -135,8 +135,7 @@ public class VideoPlaylistBean implements Serializable {
         boolean result = false;
 
         if (inDoc != null && inDoc.hasFacet(VideoConstants.VIDEO_FACET)
-                && inDoc.getPropertyValue("file:content") != null & !inDoc.hasFacet("HiddenInNavigation")
-                && !inDoc.isVersion()) {
+                && inDoc.getPropertyValue("file:content") != null & !inDoc.hasFacet("HiddenInNavigation")) {
             result = true;
         }
 

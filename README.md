@@ -23,7 +23,9 @@ The toolbar button is displayed _only_ when the plug-in detects that at least on
 3. Last, if after all the previous attempts to get at least one video we still have nothing, the plug-in checks if the current document has the `Folderish` facet:
   * If yes, then it checks if there is at least one video in the children (first level in the container)
   * If it finds more than one, the list is ordered alphabetically (based on `dc:title`)
-  
+  * **IMPORTANT**: When handling this Folderish Document, the plug-in ignores the _versions_.
+
+In all cases, video Documents with the "HiddenInNavigation" facet are never displayed.
 
 ## Build
 Assuming `maven` is installed on you computer, you can just download these sources, then `mvn clean install`. The Marketplace Package will then be ready to install:
