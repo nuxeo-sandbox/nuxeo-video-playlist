@@ -2,7 +2,7 @@
 
 nuxeo-video-playlist displays a UI where a list of videos can be played automatically one after the other.
 
-Once installed, it displays a toolbarbutton (when relevant, see below)...
+Once installed, it displays a toolbar button (when relevant, see below)...
 
 !["The Playlist"](https://raw.github.com/nuxeo-sandbox/nuxeo-video-playlist/screenshots-for-readme/toolbar-button.png)
 
