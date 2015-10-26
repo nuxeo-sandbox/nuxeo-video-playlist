@@ -5,7 +5,7 @@
     point="actions">
 
     <action id="videoPlaylistAction" order="0" label="Playlist..." type="fancybox"
-      icon="">
+      icon="img/vpl-toolbar-button.png">
       <category>DOCUMENT_UPPER_ACTION</category>
       <category>INFO_VIEW_ACTIONS</category>
       <filter-id>canDoVideoPlaylist</filter-id>

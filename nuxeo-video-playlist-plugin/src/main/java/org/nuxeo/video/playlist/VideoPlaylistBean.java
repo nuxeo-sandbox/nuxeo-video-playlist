@@ -170,7 +170,7 @@ public class VideoPlaylistBean implements Serializable {
             OperationContext ctx = new OperationContext(documentManager);
             ctx.setInput(currentDocument);
 
-            OperationChain chain = new OperationChain("notRegisteredChain");
+            OperationChain chain = new OperationChain("nuxeoPlayListGetPalette");
             chain.add(PALETTE_GET_ITEMS_OPERATION);
 
             try {
@@ -193,16 +193,13 @@ public class VideoPlaylistBean implements Serializable {
                             // We just ignore this exception.
                         }
                     }
-
                     hasAtLeastOneVideo = videos.size() > 0;
-
                 }
             } catch (OperationException e) {
                 log.error("Failed to run operation <" + PALETTE_GET_ITEMS_OPERATION + ">", e);
             } catch (JSONException e) {
                 log.error("Failed to parse the JSON result. Does the stirng starts with \"[\"?", e);
             }
-
         }
 
         /* ------------------------------------------------------- */
@@ -236,7 +233,7 @@ public class VideoPlaylistBean implements Serializable {
             // The query handles facet, existence of a file, etc...
             String nxql = NXQL_FOR_FOLDERISH.replace("PARENT_ID", currentDocument.getId());
             DocumentModelList docs = documentManager.query(nxql);
-            return docs.size() > 0;
+            hasAtLeastOneVideo = docs.size() > 0;
         }
 
         /* ------------------------------------- */
