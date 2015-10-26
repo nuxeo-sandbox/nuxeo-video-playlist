@@ -15,13 +15,13 @@ Once installed, it displays a toolbarbutton (when relevant, see below)...
 The toolbar button is displayed _only_ when the plug-in detects that at least one Document with the "Video" facet _and_ a non empty file:content binary can be used. To do so, it checks if a video can be found, in this exact order:
 
 1. Does the current document has the "palette" facet?
-  * This is provided by the `nuxeo-palette` plug-in, which lets the user to order Documents inside a `Folderish` container (not onely videos, any kind of Document).
-  * So, if the current Document has the "palette" facet _and_ has at least one valid video in the ordered list, then it uses this ordered list.
-2. If current document does not have the "palette" facet (or has it but the list of ordered documents does not contain a video), then nuxeo-video-playlist checks if current document is a `Collection`.
-  * If yes, then the plug-in check if there there are video documents in the collection
+  * This facet is provided by the `nuxeo-palette` plug-in, which lets the user to order Documents inside a `Folderish` container (not only videos, any kind of Document).
+  * So, if the current Document has the "palette" facet _and_ has at least one valid video in the ordered list, the plug-in uses this ordered list.
+2. If current document does not have the "palette" facet (or has it but the list of ordered documents does not contain a video), then nuxeo-video-playlist checks if current Document is a `Collection`.
+  * If yes, the plug-in checks if there there are videos in the collection
   * If it finds at least one, it displays the Video Playlist
 3. Last, if after all the previous attempts to get at least one video we still have nothing, the plug-in checks if the current document has the `Folderish` facet:
-  * If yes, then it checks if there is at least one vido ion the children (first level in the container)
+  * If yes, then it checks if there is at least one video in the children (first level in the container)
   * If it finds more than one, the list is ordered alphabetically (based on `dc:title`)
   
 
