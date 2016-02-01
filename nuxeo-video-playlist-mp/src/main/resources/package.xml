@@ -14,8 +14,9 @@
   <production-state>development</production-state>
   <supported>false</supported>
   <platforms>
-    <platform>cap-7.4</platform>
+    <platform>cap-@VERSION@</platform>
     <platform>cap-7.10</platform>
+    <platform>cap-8.1</platform>
   </platforms>
 <!-- 
   <dependencies>
