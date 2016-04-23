@@ -10,7 +10,7 @@
   <groupId>nuxeo-video-playlist</groupId>
   <artifactId>nuxeo-video-playlist-parent</artifactId>
   <name>Parent Project for Nuxeo Video Playlist</name>
-  <version>8.1-SNAPSHOT</version>
+  <version>8.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description />
   <modules>
@@ -18,7 +18,7 @@
     <module>nuxeo-video-playlist-mp</module>
   </modules>
   <properties>
-    <nuxeo.video-playlist.version>8.1-SNAPSHOT</nuxeo.video-playlist.version>
+    <nuxeo.video-playlist.version>8.2-SNAPSHOT</nuxeo.video-playlist.version>
   </properties>
   <dependencyManagement>
     <dependencies>
