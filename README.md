@@ -1,5 +1,7 @@
 # nuxeo-video-playlist
 
+QA build status: ![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=Sandbox/sandbox_nuxeo-video-playlist-master)
+
 nuxeo-video-playlist displays a UI where a list of videos can be played automatically one after the other.
 
 Once installed, it displays a toolbar button (when relevant, see below)...
@@ -26,6 +28,9 @@ The toolbar button is displayed _only_ when the plug-in detects that at least on
   * **IMPORTANT**: When handling this Folderish Document, the plug-in ignores the _versions_.
 
 In all cases, video Documents with the "HiddenInNavigation" facet are never displayed.
+
+## Quality Assurance
+[QA Last Build Page](http://qa.nuxeo.org/jenkins/job/Sandbox/job/sandbox_nuxeo-video-playlist-master/ws/nuxeo-video-playlist-mp/target/) of the Nuxeo Package, to get the .zip package and install it on your server (no need to build it).
 
 ## Build
 Assuming `maven` is installed on you computer, you can just download these sources, then `mvn clean install`. The Marketplace Package will then be ready to install:
