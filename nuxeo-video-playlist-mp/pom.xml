@@ -5,7 +5,7 @@
   <parent>
     <groupId>nuxeo-video-playlist</groupId>
     <artifactId>nuxeo-video-playlist-parent</artifactId>
-    <version>8.2-SNAPSHOT</version>
+    <version>8.3-SNAPSHOT</version>
   </parent>
   <groupId>nuxeo-video-playlist</groupId>
   <artifactId>nuxeo-video-playlist-mp</artifactId>
@@ -16,6 +16,7 @@
     <dependency>
       <groupId>nuxeo-video-playlist</groupId>
       <artifactId>nuxeo-video-playlist-plugin</artifactId>
+    <version>8.3-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>

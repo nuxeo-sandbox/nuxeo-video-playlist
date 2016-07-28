@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.nuxeo</groupId>
     <artifactId>nuxeo-addons-parent</artifactId>
-    <version>8.2</version>
+    <version>8.3</version>
   </parent>
   <groupId>nuxeo-video-playlist</groupId>
   <artifactId>nuxeo-video-playlist-parent</artifactId>
   <name>Parent Project for Nuxeo Video Playlist</name>
-  <version>8.2-SNAPSHOT</version>
+  <version>8.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description />
   <modules>
